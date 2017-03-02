@@ -1,0 +1,84 @@
+
+<a id="refresh_listings" href="/listings/refresh">Refresh Listings</a>
+<h1>Emogi - Code Test</h1>
+
+<hr />
+
+<table id="listings" cellspacing="0">
+
+{% if listings %}
+
+<thead>
+
+    <tr>
+
+        <th>Title</th>
+        <th>Domain</th>
+        <th>Reddit Score</th>
+        <th># of Comments</th>
+        <th>Custom Top</th>
+        <th>Custom Hot</th>
+        <th>Reddit</th>
+        <th>Link</th>
+
+    </tr>
+
+</thead>
+
+<tbody>
+
+    {% for listing in listings %}
+
+    <tr>
+
+        <td width="40%">{{ listing.data.title }}</td>
+        <td>{{ listing.data.domain }}</td>
+        <td>{{ listing.data.score }}</td>
+        <td>{{ listing.data.num_comments }}</td>
+        <td>{{ listing.custom_top }}</td>
+        <td>{{ listing.custom_hot }}</td>
+        <td><a href="https://www.reddit.com{{ listing.data.permalink }}" target="_blank">Reddit</a></td>
+        <td><a href="{{ listing.data.url }}" target="_blank">Image</a></td>
+
+    </tr>
+
+    {% endfor %}
+
+</tbody>
+
+{% endif %}
+
+</table>
+
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+<script type="text/javascript" src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#listings').DataTable({
+        'pageLength' : 50
+    });
+});
+</script>
+
+<style type="text/css">
+
+    body,html {
+        font-family: Helvetica, Arial, "Lucida Grande", sans-serif
+    }
+
+    #refresh_listings {
+        float: right;
+    }
+
+    #listings th {
+        text-align: left;
+        padding: 5px;
+    }
+
+    #listings td {
+        padding: 5px;
+    }
+
+</style>

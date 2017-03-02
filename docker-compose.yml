@@ -1,0 +1,20 @@
+version: '2'
+services:
+  app:
+    build: .
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    ports:
+     - "5000:5000"
+    volumes:
+     - ./src:/opt/emogi
+    restart: always
+  mongo:
+    image: mongo
+    environment:
+      - VIRTUAL_HOST=mongo
+      - VIRTUAL_PORT=27017
+    volumes:
+      - ./mongo_data:/data/db
