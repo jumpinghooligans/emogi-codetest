@@ -7,12 +7,12 @@ class RedditApi():
     comment_multiplier = 3
 
     # the api was a bit finnicky
-    pages_count = 5
+    pages_count = 10
     max_failures = 3
 
     # crank this up to increase how fast time
     # will decay the score
-    time_power = 1.5
+    time_power = 1.2
     
     # Most of this should all be factored out into models
     def request_listings(self, subreddit=None):
@@ -100,7 +100,7 @@ class RedditApi():
 
     # I haven't figured out Python and serialization
     # This is the best I could do in the time allotted
-    def get_listings(self, ):
+    def get_listings(self):
 
         all_listings = [ listing for listing in mongo.db.listings.find() ]
 
@@ -108,6 +108,11 @@ class RedditApi():
             listing.pop('_id')
 
         return all_listings
+
+    # shortcut for get all then filter
+    def get_image_listings(self):
+
+        return self.filter_images(self.get_listings())
 
     # Filter out images based on domain or suffix
     def filter_images(self, listings):
@@ -158,3 +163,26 @@ class RedditApi():
     def comment_score(self, listing):
 
         return listing.get('data').get('num_comments') * self.comment_multiplier
+
+    def aggregate_subreddits(self, listings):
+
+        # keep a simple dictionary of subreddit to
+        # count of posts, sum of scores
+        subreddits = {}
+
+        for listing in listings:
+
+            subreddit = listing.get('data').get('subreddit')
+
+            if not subreddits.get(subreddit, None):
+                subreddits[subreddit] = {
+                    'listing_count' : 0,
+                    'sum_top' : 0,
+                    'sum_hot' : 0
+                }
+
+            subreddits[subreddit]['listing_count'] += 1
+            subreddits[subreddit]['sum_top'] += listing.get('custom_top')
+            subreddits[subreddit]['sum_hot'] += listing.get('custom_hot')
+
+        return subreddits

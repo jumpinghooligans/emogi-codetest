@@ -4,9 +4,11 @@
 
 <hr />
 
-<table id="listings" cellspacing="0">
+<h2>Listings</h2>
 
 {% if listings %}
+
+<table id="listings" cellspacing="0">
 
 <thead>
 
@@ -14,6 +16,7 @@
 
         <th>Title</th>
         <th>Domain</th>
+        <th>Subreddit</th>
         <th>Reddit Score</th>
         <th># of Comments</th>
         <th>Custom Top</th>
@@ -33,6 +36,7 @@
 
         <td width="40%">{{ listing.data.title }}</td>
         <td>{{ listing.data.domain }}</td>
+        <td>{{ listing.data.subreddit }}</td>
         <td>{{ listing.data.score }}</td>
         <td>{{ listing.data.num_comments }}</td>
         <td>{{ listing.custom_top }}</td>
@@ -46,9 +50,49 @@
 
 </tbody>
 
+</table>
+
 {% endif %}
 
+<h2>Trending Subreddits</h2>
+
+{% if trending_subreddits %}
+
+<table id="trending" cellspacing="0">
+
+<thead>
+
+    <tr>
+
+        <th>Subreddit</th>
+        <th>Count</th>
+        <th>Sum Top</th>
+        <th>Sum Hot</th>
+
+    </tr>
+
+</thead>
+
+<tbody>
+
+    {% for subreddit, data in trending_subreddits.items() %}
+
+    <tr>
+
+        <td width="40%">{{ subreddit }}</td>
+        <td>{{ data.listing_count }}</td>
+        <td>{{ data.sum_top }}</td>
+        <td>{{ data.sum_hot }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+</tbody>
+
 </table>
+
+{% endif %}
 
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
 <script type="text/javascript" src="//code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -57,6 +101,9 @@
 <script type="text/javascript">
 $(document).ready(function(){
     $('#listings').DataTable({
+        'pageLength' : 50
+    });
+    $('#trending').DataTable({
         'pageLength' : 50
     });
 });

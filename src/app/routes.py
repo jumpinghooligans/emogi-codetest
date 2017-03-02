@@ -8,17 +8,28 @@ def index():
     r = RedditApi()
 
     # get our frontpage listings
-    frontpage = r.get_listings()
+    image_listings = r.get_image_listings()
 
-    # filter down to only images
-    image_listings = r.filter_images(frontpage)
+    # get trending subreddits
+    trending_subreddits = r.aggregate_subreddits(image_listings)
 
-    return render_template('list_listings.html', listings=image_listings)
+    return render_template('list_listings.html', 
+        listings=image_listings,
+        trending_subreddits=trending_subreddits
+    )
 
+@app.route('/trending')
+def trending_subreddits():
+    r = RedditApi()
+
+    frontpage = r.get_image_listings()
+
+    trending_subreddits = r.aggregate_subreddits(frontpage)
+
+    return jsonify(trending_subreddits)
 
 @app.route('/listings')
 def list_frontpage():
-    # get the thing    
     r = RedditApi()
 
     frontpage = r.get_listings()
@@ -27,22 +38,19 @@ def list_frontpage():
 
 @app.route('/listings/images')
 def list_images():
-    # get the thing    
     r = RedditApi()
 
     # i'm not really good with python ObjectIds were really
     # causing issues
-    frontpage = r.get_listings()
+    frontpage = r.get_image_listings()
 
     # filter down to only imgur listings
     image_listings = filter_images(frontpage)
-    app.logger.info('filtered down to %i imgur listings', len(image_listings))
 
     return jsonify(image_listings)
 
 @app.route('/listings/refresh')
 def refresh_listings():
-    # get the thing    
     r = RedditApi()
 
     # grab our front page listings
