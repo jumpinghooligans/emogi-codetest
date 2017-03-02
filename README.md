@@ -1,5 +1,4 @@
 # emogi-codetest
-
 I put this together quicking to scrape a few pages from the frontpage of reddit, store it in mongo and provide alternative scores for sorting.
 
 It generates out a simple table with some basic data and the new scores, you must explicity refresh the data in the DB by either hitting `/listings/refresh` or clicking the refresh link on the front page.
@@ -20,6 +19,7 @@ REST API
 > There wasn't much to do here
 > - GET requests on `/listings` return already processed listings
 > - GET requests on `/listings/refresh` will pull, process and store a new set of data
+> - GET requests on `/trending` will return aggregated count, hot and top scores for the current dataset
 > I wanted to add params to the refresh for directing to a specific subreddit or controlling the page depth (default is 5)
 
 Index page
